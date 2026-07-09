@@ -6,12 +6,12 @@
  * @credits @Malcev https://www.autohotkey.com/boards/viewtopic.php?f=76&t=76103
  * @date 2026/07/07
  * @releasedate 2025/03/25
- * @version 2.8.1.0
+ * @version 2.80.1.0
  ***********************************************************************/
 
 AppName := "Read Notifications"
 ;@Ahk2Exe-Let U_AppName = %A_PriorLine%
-AppVersion := "2.8.1.0"
+AppVersion := "2.80.1.0"
 ;@Ahk2Exe-Let U_Version = %A_PriorLine%
 AppDescription := "Read Notifications turns Windows notifications into instant voice alerts using Text-to-Speech."
 ;@endregion
