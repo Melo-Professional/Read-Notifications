@@ -1,8 +1,8 @@
 /************************************************************************
  * @description Theme Library to apply light / dark / auto modes 
  * @author Melo (melo@meloprofessional.com)
- * @date 2026/06/08
- * @version 1.9.0
+ * @date 2026/07/05
+ * @version 1.11.0
  ***********************************************************************/
 
 #Requires AutoHotkey v2.0
@@ -17,24 +17,33 @@ ApplyTheme()
 HowtoCreateMyGui() {
     MyGuiTitle := "About"
     MyGuiOptions := "+LastFound -SysMenu"
-    MyGui := Gui(MyGuiOptions, MyGuiTitle)
+    ExampleGui := Gui(MyGuiOptions, MyGuiTitle)
  
     ; ---- GUI Content
-    MyGui.Add("Text",, "Current Theme: " . CurrentActualTheme)
+    ExampleGui.Add("Text",, "Current Theme: " . CurrentActualTheme)
+    txt33 := ExampleGui.Add("Text", "x25 y50", "Performance Controls")
+    txt33.ThemeStyle := "Strong" ; "Smooth"
+
+    txt34 := ExampleGui.Add("Text", "x25 y50", "Another Control")
+    txt34.BypassTheme := true
+
     ;----------------
  
-    MyGui.AddButton("h30 Default", "&OK").OnEvent("Click", CleanDestroy)
-    MyGui.OnEvent("Close", CleanDestroy)
-    MyGui.OnEvent("Escape", CleanDestroy)
-    ApplyThemeToGui(MyGui)
-    WatchedGUIs.Push(MyGui)
-    MyGui.Show()
+    ExampleGui.AddButton("h30 Default", "&OK").OnEvent("Click", CleanDestroy)
+    ExampleGui.OnEvent("Close", CleanDestroy)
+    ExampleGui.OnEvent("Escape", CleanDestroy)
+
+    ApplyThemeToGui(ExampleGui)
+    WatchedGUIs.Push(ExampleGui)
+
+    ExampleGui.Show()
+
     CleanDestroy(*) {
-          RemoveGuiFromArray(MyGui)
-          MyGui.Destroy()
+          RemoveGuiFromArray(ExampleGui)
+          ExampleGui.Destroy()
        }
  
-    return MyGui
+    return ExampleGui
 }
 
 ApplyThemeToGui(guiObj) {
@@ -95,16 +104,23 @@ ApplyThemeToGui(guiObj) {
             DllCall("uxtheme.dll\SetWindowTheme", "ptr", ctrlObj.Hwnd, "str", themeStr, "ptr", 0)
 
             switch ctrlObj.Type {
-                case "Text", "Checkbox", "Radio":
-                    if (InStr(ctrlObj.Name, "Title") || InStr(ctrlObj.Name, "Strong"))
+                case "Text", "Checkbox", "GroupBox":
+
+                    ctrlObj.Opt("+BackgroundTrans")
+                    
+                    ; Direct implementation support for dynamic custom object property tags
+                    tStyle := ctrlObj.HasOwnProp("ThemeStyle") ? ctrlObj.ThemeStyle : ""
+                    
+                    if (tStyle == "Strong" || InStr(ctrlObj.Name, "Title") || InStr(ctrlObj.Name, "Strong"))
                         ctrlObj.Opt("c" . colors.TextStrong)
-                    else if (InStr(ctrlObj.Name, "Footer") || InStr(ctrlObj.Name, "Smooth"))
+                    else if (tStyle == "Weak" || tStyle == "Smooth" || InStr(ctrlObj.Name, "Footer") || InStr(ctrlObj.Name, "Smooth"))
                         ctrlObj.Opt("c" . colors.TextSmooth)
                     else
                         ctrlObj.Opt("c" . colors.TextDefault)
 
-                    if (ctrlObj.Type = "Text")
-                        ctrlObj.Opt("+Background" . colors.Bg)
+
+                    ;if (ctrlObj.Type = "Text")
+                     ;   ctrlObj.Opt("+Background" . colors.Bg)
 
                 case "Edit", "ListBox", "ComboBox", "DDL":
                     ctrlBg := colors.HasOwnProp("Ctrl") ? colors.Ctrl : colors.Bg
@@ -130,10 +146,7 @@ ApplyThemeToGui(guiObj) {
                     }
                     SetListViewHeaderSubclass(ctrlObj.Hwnd, textBGR)
 
-                case "Button":
-                    ctrlObj.Opt("+Background" . colors.Bg)
-
-                case "Progress":
+                case "Button", "Progress":
                     ctrlObj.Opt("+Background" . colors.Bg)
             }
 

@@ -7,6 +7,7 @@
 
 ;@region VARS
 ; CUSTOM VARIABLES
+App.Github := "https://github.com/Melo-Professional/Read-Notifications"
 
 VoiceNumber                 := 1        ; 0 ~ 4
 VoiceRate                   := 0        ; -10 ~ 10

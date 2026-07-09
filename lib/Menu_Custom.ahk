@@ -1,8 +1,8 @@
 /************************************************************************
  * @description Robust, Modular Menu (No-Crash Dependency Checking)
  * @author Melo (melo@meloprofessional.com)
- * @date 2026/06/08
- * @version 1.3.1
+ * @date 2026/07/06
+ * @version 1.3.2
  ***********************************************************************/
 
 #Requires AutoHotkey v2.0
@@ -13,6 +13,12 @@ Menu_Custom() {
     MoreMenu := TrayMenu.HasProp("MoreMenu") ? TrayMenu.MoreMenu : ""
 
 
+    ; RN Reload fix
+    TrayMenu.Delete("Restart")
+    TrayMenu.Insert("Exit", "Restart", (*) => Reload())
+
+
+
     ModeMenu := Menu()
     ModeMenu.Add("Read Any Notification", MenuReadAnyHandler)
     ModeMenu.Add("Selected Programs...", MenuSelectProgramsHandler)
@@ -20,6 +26,11 @@ Menu_Custom() {
     TrayMenu.Insert("More", "Read Content", MenuReadContentHandler)
     TrayMenu.Insert("More", "Respect DND", MenuDNDHandler)
     TrayMenu.Insert("More", "Voice Settings...", (*) => VoiceSettings())
+
+    if !A_IsCompiled {
+        TrayMenu.Insert("More", "Test Notification...", (*) => TrayTip("This is the sub-text.", "Hello, world!", 1))
+    }
+
     TrayMenu.Insert("More")
 
     SettingsLoadReadContent() ? TrayMenu.Check("Read Content") : ""
