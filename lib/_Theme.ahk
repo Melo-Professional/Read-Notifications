@@ -1,8 +1,8 @@
 /************************************************************************
  * @description Theme Library to apply light / dark / auto modes 
  * @author Melo (melo@meloprofessional.com)
- * @date 2026/07/05
- * @version 1.11.0
+ * @date 2026/07/27
+ * @version 1.15.0 (removed background trans from text ddl and checkbox)
  ***********************************************************************/
 
 #Requires AutoHotkey v2.0
@@ -46,7 +46,7 @@ HowtoCreateMyGui() {
     return ExampleGui
 }
 
-ApplyThemeToGui(guiObj) {
+ApplyThemeToGui(guiObj, TextColor := "Auto") {
     if !Settings.DarkModeCompatible
         return    
 
@@ -56,7 +56,17 @@ ApplyThemeToGui(guiObj) {
     ; --- Color Conversion (with fallback) ---
     bgBGR   := HexToBGR(colors.Bg)
     ctrlBGR := HexToBGR(colors.HasOwnProp("Ctrl") ? colors.Ctrl : colors.Bg)
-    textBGR := HexToBGR(colors.TextDefault)
+
+    if (TextColor = "Dark") {
+        colors.TextDefault := Settings.Theme.Dark.TextDefault
+        colors.TextStrong := Settings.Theme.Dark.TextStrong
+        colors.TextSmooth := Settings.Theme.Dark.TextSmooth
+    } else if (TextColor = "Light") {
+        colors.TextDefault := Settings.Theme.Light.TextDefault
+        colors.TextStrong := Settings.Theme.Light.TextStrong
+        colors.TextSmooth := Settings.Theme.Light.TextSmooth
+    }
+        textBGR := HexToBGR(colors.TextDefault)
 
     ; --- Dark Mode System Setup ---
     static uxtheme := DllCall("GetModuleHandle", "Str", "uxtheme.dll", "Ptr")
@@ -79,13 +89,25 @@ ApplyThemeToGui(guiObj) {
     ; --- WM_CTLCOLORLISTBOX Handler (FIXED: Toggles cleanly between modes) ---
     static PrevOnCtlBound := 0
     if (PrevOnCtlBound) {
-        OnMessage(0x0134, PrevOnCtlBound, 0) ; Disables the old custom drawing handle
+
+        if IsSet(MessageManager) {
+            MessageManager.Unregister(0x0134, PrevOnCtlBound) ; Disables the old custom drawing handle
+        } else {
+            OnMessage(0x0134, PrevOnCtlBound, 0) ; Disables the old custom drawing handle
+        }
+
         PrevOnCtlBound := 0
     }
 
     if (isDark) {
         OnCtlBound := OnCtlColorListbox.Bind(ctrlBGR, textBGR)
-        OnMessage(0x0134, OnCtlBound, -1)
+
+        if IsSet(MessageManager) {
+            MessageManager.Register(0x0134, OnCtlBound, true)
+        } else {
+            OnMessage(0x0134, OnCtlBound, -1)
+        }
+
         PrevOnCtlBound := OnCtlBound
     }
 
@@ -105,8 +127,9 @@ ApplyThemeToGui(guiObj) {
 
             switch ctrlObj.Type {
                 case "Text", "Checkbox", "GroupBox":
-
-                    ctrlObj.Opt("+BackgroundTrans")
+					if !(ctrlObj.Type = "Text") {
+	                    ctrlObj.Opt("+BackgroundTrans")
+					}
                     
                     ; Direct implementation support for dynamic custom object property tags
                     tStyle := ctrlObj.HasOwnProp("ThemeStyle") ? ctrlObj.ThemeStyle : ""
@@ -257,10 +280,20 @@ ApplyTheme(ThemeMode := Settings.DesiredTheme) {
     Settings.DesiredTheme := ThemeMode
     
     if (ThemeMode == "Auto") {
-        OnMessage(0x1A, WindowsThemeChanged)
+        if IsSet(MessageManager) {
+            MessageManager.Register(0x031A, WindowsThemeChanged)
+        } else {
+            OnMessage(0x031A, WindowsThemeChanged)
+        }
+
         CurrentActualTheme := GetWindowsTheme()
     } else {
-        OnMessage(0x1A, WindowsThemeChanged, 0)
+        if IsSet(MessageManager) {
+            MessageManager.Unregister(0x031A, WindowsThemeChanged)
+        } else {
+            OnMessage(0x031A, WindowsThemeChanged, 0)
+        }
+
         CurrentActualTheme := ThemeMode
     }
     

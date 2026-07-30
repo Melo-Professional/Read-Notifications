@@ -4,17 +4,19 @@
  * @description Read Notifications turns Windows notifications into instant voice alerts using Text-to-Speech.
  * @author Melo (melo@meloprofessional.com)
  * @credits @Malcev https://www.autohotkey.com/boards/viewtopic.php?f=76&t=76103
- * @date 2026/07/07
+ * @date 2026/07/30
  * @releasedate 2025/03/25
- * @version 2.80.1.0
+ * @version 2.80.3.0
  ***********************************************************************/
 
 AppName := "Read Notifications"
 ;@Ahk2Exe-Let U_AppName = %A_PriorLine%
-AppVersion := "2.80.1.0"
+AppVersion := "2.80.3.0"
 ;@Ahk2Exe-Let U_Version = %A_PriorLine%
 AppDescription := "Read Notifications turns Windows notifications into instant voice alerts using Text-to-Speech."
 ;@endregion
+
+;_bkpMode := "AppVersionAndMinutes"
 
 ;@region Directives
 #Requires AutoHotkey v2.0
@@ -32,6 +34,7 @@ KeyHistory(0)
 
 ;@region Includes
 #Include *i <_CompilerDirectives>
+#Include *i <_Backup>
 #Include *i <_Config&Vars>
 #Include *i <_MsgBoxCustom>
 #Include *i <_SaveSettings>
@@ -52,11 +55,7 @@ KeyHistory(0)
 
 ;@region Startup
 ; SPLASHSCREEN
-if IsSet(SplashScreen){
-;    SplashScreen("Banner", false)       ; show banner and wait
-;    sleep(5000)
-;    SplashScreen()                      ; shows default / destroys
-;    SplashScreen("Icon")                ; show icon and destroys
+if (A_Args.Length == 0) && IsSet(SplashScreen){
     SplashScreen()
 }
 
@@ -73,7 +72,6 @@ global voices   := oVoice.GetVoices()
 Speak(App.Name)
 
 ;@endregion
-SplashScreen()
 ;@endregion
 
 SettingsLoadProgramsList()
