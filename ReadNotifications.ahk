@@ -4,19 +4,19 @@
  * @description Read Notifications turns Windows notifications into instant voice alerts using Text-to-Speech.
  * @author Melo (melo@meloprofessional.com)
  * @credits @Malcev https://www.autohotkey.com/boards/viewtopic.php?f=76&t=76103
- * @date 2026/07/30
+ * @date 2026/08/06
  * @releasedate 2025/03/25
- * @version 2.80.3.0
+ * @version 3.0.0.0
  ***********************************************************************/
 
 AppName := "Read Notifications"
 ;@Ahk2Exe-Let U_AppName = %A_PriorLine%
-AppVersion := "2.80.3.0"
+AppVersion := "3.0.0.0"
 ;@Ahk2Exe-Let U_Version = %A_PriorLine%
 AppDescription := "Read Notifications turns Windows notifications into instant voice alerts using Text-to-Speech."
 ;@endregion
 
-;_bkpMode := "AppVersionAndMinutes"
+_bkpMode := "AppVersionAndMinutes"
 
 ;@region Directives
 #Requires AutoHotkey v2.0
@@ -39,8 +39,9 @@ KeyHistory(0)
 #Include *i <_MsgBoxCustom>
 #Include *i <_SaveSettings>
 #Include *i <_Theme>
-;#Include *i <_OSDCustom>
 ;#Include *i <_Color_Picker_Dialog_>
+;#Include *i <_OSDCustom>
+#Include *i <_AutoUpdater>
 #Include *i <_SplashScreen>
 #Include *i <_About>
 ;#Include *i <_Help>
@@ -62,6 +63,9 @@ if (A_Args.Length == 0) && IsSet(SplashScreen){
 ; TRAY ICON + MENU
 StartMenu()
 Menu_Custom()
+if IsSet(StartAutoUpdater) {
+	%"StartAutoUpdater"%()
+}
 
 ; TTS INITIALIZATION
 SettingsLoadVoiceSettings()

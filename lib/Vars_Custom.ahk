@@ -8,6 +8,12 @@
 ;@region VARS
 ; CUSTOM VARIABLES
 App.Github := "https://github.com/Melo-Professional/Read-Notifications"
+if (App.HasOwnProp("Github")  && App.Github != "" && App.Github != "https://github.com/Melo-Professional/") {
+	App.UpdateAuto := true
+	App.UpdateFrequencyDays := 3
+	App.UpdateLastCheck := ""
+	SaveToINI.Push("App.UpdateAuto", "App.UpdateFrequencyDays", "App.UpdateLastCheck")
+}
 
 VoiceNumber                 := 1        ; 0 ~ 4
 VoiceRate                   := 0        ; -10 ~ 10
