@@ -1,8 +1,8 @@
 /************************************************************************
  * @description Vars_Custom
  * @author Melo (melo@meloprofessional.com)
- * @date 2026/06/08
- * @version 1.0.0
+ * @date 2026/08/06
+ * @version 1.3.0
  ***********************************************************************/
 
 ;@region VARS
@@ -13,6 +13,8 @@ if (App.HasOwnProp("Github")  && App.Github != "" && App.Github != "https://gith
 	App.UpdateFrequencyDays := 3
 	App.UpdateLastCheck := ""
 	SaveToINI.Push("App.UpdateAuto", "App.UpdateFrequencyDays", "App.UpdateLastCheck")
+	RegisterArrayItems(SaveToINI)
+	LoadINI()
 }
 
 VoiceNumber                 := 1        ; 0 ~ 4
