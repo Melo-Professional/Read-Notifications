@@ -4,14 +4,14 @@
  * @description Read Notifications turns Windows notifications into instant voice alerts using Text-to-Speech.
  * @author Melo (melo@meloprofessional.com)
  * @credits @Malcev https://www.autohotkey.com/boards/viewtopic.php?f=76&t=76103
- * @date 2026/08/06
+ * @date 2026/08/12
  * @releasedate 2025/03/25
- * @version 3.0.1.0
+ * @version 3.1.0.0
  ***********************************************************************/
 
 AppName := "Read Notifications"
 ;@Ahk2Exe-Let U_AppName = %A_PriorLine%
-AppVersion := "3.0.1.0"
+AppVersion := "3.1.0.0"
 ;@Ahk2Exe-Let U_Version = %A_PriorLine%
 AppDescription := "Read Notifications turns Windows notifications into instant voice alerts using Text-to-Speech."
 ;@endregion
