@@ -4,14 +4,14 @@
  * @description Read Notifications turns Windows notifications into instant voice alerts using Text-to-Speech.
  * @author Melo (melo@meloprofessional.com)
  * @credits @Malcev https://www.autohotkey.com/boards/viewtopic.php?f=76&t=76103
- * @date 2026/08/13
+ * @date 2026/08/21
  * @releasedate 2025/03/25
- * @version 3.2.0.0
+ * @version 3.2.1.101
  ***********************************************************************/
 
 AppName := "Read Notifications"
 ;@Ahk2Exe-Let U_AppName = %A_PriorLine%
-AppVersion := "3.2.0.0"
+AppVersion := "3.2.1.101"
 ;@Ahk2Exe-Let U_Version = %A_PriorLine%
 AppDescription := "Read Notifications turns Windows notifications into instant voice alerts using Text-to-Speech."
 ;@endregion
@@ -35,22 +35,24 @@ KeyHistory(0)
 ;@region Includes
 #Include *i <_CompilerDirectives>
 #Include *i <_Backup>
-#Include *i <_HelperFuncs>
-#Include *i <_Config&Vars>
 #Include *i <_SaveSettings>
+#Include *i <_Config&Vars>
+#Include *i <_HelperFuncs>
 ;#Include *i <_MessageManager>
 ;#Include *i <_TrayIconHandler>
 #Include *i <_Theme>
 ;#Include *i <_FrostedTheme>
-;#Include *i <_TitleBar>
+#Include *i <_TitleBar>
 #Include *i <_GuiTracker>
 ;#Include *i <_ModernSlider>
 ;#Include *i <_Color_Picker_Dialog_>
 ;#Include *i <_HotkeysRecorder>
+;#Include *i <_ODColors>
 ;#Include *i <_OSDCustom>
 ;#Include *i <_ODColors>
 #Include *i <_AutoUpdater>
 #Include *i <_SplashScreen>
+;#Include *i <_SplashOSD>
 #Include *i <_About>
 ;#Include *i <_Help>
 #Include *i <_Menu>
